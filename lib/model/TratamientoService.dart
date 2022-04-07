@@ -19,5 +19,13 @@ class  Tratamiento{
         comentario: json['comentario'] as String?
     );
   }
-
+  /*TODO:
+    String get_nombre();/
+  int get_id();
+  DateTime get_inicio_fecha();/
+  get_estado();
+  traducir_estado();
+  set_name(String nombre,int id);
+  calcular_estado();
+*/
 }
