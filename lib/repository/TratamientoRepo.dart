@@ -1,9 +1,11 @@
+import 'dart:core';
 import 'package:gestorderecordatorios/model/MedicamentoService.dart';
 import 'package:gestorderecordatorios/model/TratamientoService.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'dart:io' as io;
+import 'dart:async';
 
 abstract class TratamientoRepo{
 
@@ -14,15 +16,15 @@ abstract class TratamientoRepo{
 }
 
 class TratamientoSqlite implements TratamientoRepo{
-  static Database _db;
-  Future<Database> get db async{
-    if(_db !=null) return _db;
+  static Database? _db=null;
+  Future<Database?> get db async{
+    if(_db != null) return _db;
     _db = await initDb();
     return _db;
-}
+  }
   initDb() async{
     io.Directory documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "GestroMedico.db");
+    String path = join(documentsDirectory.path, "GestorMedico.db");
     var theDb = await openDatabase(path ,version: 1, onCreate: _onCreate);
     return theDb;
   }
@@ -33,10 +35,10 @@ class TratamientoSqlite implements TratamientoRepo{
       'CREATE TABLE "tratamientos" ("tratamiento_id"	INTEGER, "nombre"	TEXT NOT NULL, "estado"	INTEGER NOT NULL, "comentario"	TEXT, PRIMARY KEY("tratamiento_id"))'
     );
     await db.execute(
-        'CREATE TABLE "medicamentos" ("medicamento_id"	INTEGER, "tratamiento_id"	INTEGER, "nombre"	TEXT NOT NULL, "presentacion"	TEXT NOT NULL, "dosis"	TEXT NOT NULL, "horarios_horas"	INTEGER NOT NULL, "numero_dosis"	INTEGER, "comentario"	TEXT, FOREIGN KEY("tratamiento_id") REFERENCES "tratamientos"("tratamiento_id"), PRIMARY KEY("medicamento_id" AUTOINCREMENT)'
+        'CREATE TABLE "medicamentos" ("medicamento_id"	INTEGER, "tratamiento_id"	INTEGER, "nombre"	TEXT NOT NULL, "presentacion"	TEXT NOT NULL, "dosis"	TEXT NOT NULL, "horarios_horas"	INTEGER NOT NULL, "numero_dosis"	INTEGER, "comentario"	TEXT, FOREIGN KEY("tratamiento_id") REFERENCES "tratamientos"("tratamiento_id"), PRIMARY KEY("medicamento_id" AUTOINCREMENT))'
     );
     await db.execute(
-        'CREATE TABLE "medicamentos" ("medicamento_id"	INTEGER, "tratamiento_id"	INTEGER, "nombre"	TEXT NOT NULL, "presentacion"	TEXT NOT NULL, "dosis"	TEXT NOT NULL, "horarios_horas"	INTEGER NOT NULL, "numero_dosis"	INTEGER, "comentario"	TEXT, FOREIGN KEY("tratamiento_id") REFERENCES "tratamientos"("tratamiento_id"), PRIMARY KEY("medicamento_id" AUTOINCREMENT)'
+        'CREATE TABLE "dosis" ("tratamiento_id"	INTEGER, "medicamento_id"	INTEGER, "dosis_id"	INTEGER, "estado"	INTEGER NOT NULL, "momento"	datetime NOT NULL, "comentario"	TEXT FOREIGN KEY("tratamiento_id") REFERENCES "tratamientos"("tratamiento_id"), FOREIGN KEY("medicamento_id") REFERENCES "medicamentos"("medicamento_id"),PRIMARY KEY("dosis_id" AUTOINCREMENT))'
     );
   }
   @override
@@ -53,12 +55,17 @@ class TratamientoSqlite implements TratamientoRepo{
   @override
   void agregar_tratamiento(muestra) {
     // TODO: implement agregar_tratamiento
+    throw UnimplementedError();
   }
 
   @override
-  Future<List<Tratamiento>> get_tratamientos() {
-    // TODO: implement get_tratamientos
-    throw UnimplementedError();
+  Future<List<Tratamiento>> get_tratamientos() async {
+    var dbClient = await db;
+    var list = await dbClient?.rawQuery('SELECT * FROM tratamientos');
+    List<Tratamiento> listatratamientos = new List.empty();
+    for(int i =0 ; i< (list?.length ?? 0) ;i++){ 
+      listatratamientos.add(new Tratamiento( list![i]['tratamiento_id'] , list![i]['nombre'], list![i]['estado']));
+    }
   }
 
 }
