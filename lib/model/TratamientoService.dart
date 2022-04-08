@@ -18,6 +18,30 @@ class  Tratamiento{
         estado: json['estado'] as int,
         comentario: json['comentario'] as String?
     );
+
+  }
+  String get_nombre(){
+    return nombre;
+  }
+  int get_id(){
+    return tratamiento_id;
+  }
+  int get_estado(){
+    return estado;
+  }
+  String traducir_estado(){
+    switch(get_estado()){
+      case 0:
+          return "sin medicamento";
+      case 1:
+        return "Activo";
+      case 2:
+          return "Finalizado";
+      case 3:
+          return "Finalizado por cancelacion";
+      default:
+        return "Discrepancia";
+    }
   }
   /*TODO:
     String get_nombre();/
@@ -26,6 +50,5 @@ class  Tratamiento{
   get_estado();
   traducir_estado();
   set_name(String nombre,int id);
-  calcular_estado();
 */
 }
