@@ -1,3 +1,4 @@
+
 import 'dart:core';
 import 'package:gestorderecordatorios/model/MedicamentoService.dart';
 import 'package:gestorderecordatorios/model/TratamientoService.dart';
@@ -53,19 +54,19 @@ class TratamientoSqlite implements TratamientoRepo{
   }
 
   @override
-  void agregar_tratamiento(muestra) {
-    // TODO: implement agregar_tratamiento
-    throw UnimplementedError();
+  void agregar_tratamiento(muestra) async{
+    var dbClient = await db;
+    await dbClient?.transaction((txn) async {
+      return await txn.rawInsert( "INSERT INTO tratamientos(nombre,estado) VALUES('"+ muestra.nombre+"','"+muestra.estado.toString()+"')");
+    });
   }
 
   @override
   Future<List<Tratamiento>> get_tratamientos() async {
     var dbClient = await db;
-    var list = await dbClient?.rawQuery('SELECT * FROM tratamientos');
-    List<Tratamiento> listatratamientos = new List.empty();
-    for(int i =0 ; i< (list?.length ?? 0) ;i++){ 
-      listatratamientos.add(new Tratamiento( list![i]['tratamiento_id'] , list![i]['nombre'], list![i]['estado']));
-    }
+    final response = await dbClient?.rawQuery('SELECT * FROM tratamientos');
+    final listatratamientos = response?.map((tratamiento) => Tratamiento.fromJson(tratamiento)).toList() ?? [];
+    return listatratamientos;
   }
 
 }
