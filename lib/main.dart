@@ -3,12 +3,29 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gestorderecordatorios/Resources/materialcolo.dart';
+import 'package:gestorderecordatorios/routes/app_routes.dart';
+import 'package:gestorderecordatorios/routes/app_views.dart';
 import 'package:get/get.dart';
 void main() {
-  runApp(const MyApp());
+  runApp(Myapp());
 }
 
-class MyApp extends StatelessWidget {
+class Myapp extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: generateMaterialColor(const Color(0xFF00D437)),
+          ).copyWith(
+          secondary: generateMaterialColor(const Color(0xFF00D3E0)),
+          ),
+          ),
+          initialRoute: AppRoutes.DASHBOARD,
+          getPages: AppViews.list);
+  }
+}
+/*class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
@@ -145,5 +162,5 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
 
-}
+}*/
 

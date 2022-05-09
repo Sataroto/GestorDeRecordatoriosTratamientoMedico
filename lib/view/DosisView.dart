@@ -1,21 +1,21 @@
-import 'package:gestorderecordatorios/viewmodel/TratamientosViewModel.dart';
+
+import 'package:gestorderecordatorios/viewmodel/DosisViewModel.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 
-class TratamientosView extends GetView<TratamientosViewModel>{
+class DosisView extends GetView<DosisViewModel>{
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text("Tratamientos"),
+        title: Text("Dosis"),
       ),
       body: Container(
         child: const Center(
           child: Text(
-            "Ver tratamientos",
+            "Dosis",
             style: TextStyle(fontSize: 20),
           ),
         ),
