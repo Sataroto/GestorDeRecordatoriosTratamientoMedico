@@ -42,6 +42,7 @@ class  Tratamiento{
       default:
         return "Discrepancia";
     }
+
   }
   /*TODO:
     String get_nombre();/

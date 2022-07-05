@@ -6,9 +6,12 @@ import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 class ListaTratamientosViewModel extends GetxController{
   List<Tratamiento> tratamientos = List<Tratamiento>.empty();
 
-  Future<void> fetchTratamientos() async{
+  getData() async{
       final resultados = await TratamientoSqlite().get_tratamientos();
       tratamientos = resultados;
   }
+
+
+
 
 }
